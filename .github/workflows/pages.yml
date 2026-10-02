@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+# main (the site and appcast.xml) and downloads (the latest DMG) are pushed
+# here by Gannin's pipeline. This deploys both, the DMG under /downloads/,
+# through the Actions Pages path, which queues overlapping deploys instead
+# of failing them.
+on:
+  push:
+    branches: [main, downloads]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Fetch the downloads
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: downloads
+          path: _downloads
+          persist-credentials: false
+        # There's no downloads branch until the first release.
+        continue-on-error: true
+
+      - name: Assemble site
+        run: |
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'README.md' --exclude '_downloads' ./ _site/
+          if [ -d _downloads ]; then
+            mkdir -p _site/downloads
+            rsync -a --exclude '.git' _downloads/ _site/downloads/
+          fi
+          ls -la _site _site/downloads 2>/dev/null || true
+
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
