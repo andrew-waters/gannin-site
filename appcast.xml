@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+  <channel>
+    <title>Gannin</title>
+    <item>
+      <title>Gannin 0.0.1</title>
+      <sparkle:version>4</sparkle:version>
+      <sparkle:shortVersionString>0.0.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[
+<ul><li>The first build of Gannin for Mac, signed, notarised and updating itself from gannin.ai</li></ul>
+]]></description>
+      <pubDate>Fri, 02 Oct 2026 15:46:13 +0000</pubDate>
+      <enclosure url="https://gannin.ai/downloads/Gannin-0.0.1.dmg" type="application/octet-stream" sparkle:edSignature="xRxKrVNHv4oXqPEVqCQvfTkKEmxrtvHxcPAcgBAIF5OU/dCKBnipDDqf1+Ui0qmV2mA6RiDfq9wd7MNPeEb2Aw==" length="18732049" />
+    </item>
+  </channel>
+</rss>
